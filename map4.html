@@ -56,6 +56,88 @@
               trackUserLocation: true,
             })
           );
+
+          // Load points after map is loaded
+          map.on('load', () => {
+            // Add the points source
+            map.addSource('points', {
+              type: 'geojson',
+              data: 'points.geojson'
+            });
+
+            // Add a circle layer for the points
+            map.addLayer({
+              id: 'points-layer',
+              type: 'circle',
+              source: 'points',
+              paint: {
+                'circle-radius': 8,
+                'circle-color': '#007cbf',
+                'circle-stroke-width': 2,
+                'circle-stroke-color': '#ffffff'
+              }
+            });
+
+            // Change cursor on hover
+            map.on('mouseenter', 'points-layer', () => {
+              map.getCanvas().style.cursor = 'pointer';
+            });
+
+            map.on('mouseleave', 'points-layer', () => {
+              map.getCanvas().style.cursor = '';
+            });
+
+            // Add click event for popups
+            map.on('click', 'points-layer', (e) => {
+              const coordinates = e.features[0].geometry.coordinates.slice();
+              const properties = e.features[0].properties;
+              
+              // Build popup content
+              let popupContent = '<div style="font-family: sans-serif;">';
+              
+              if (properties.name) {
+                popupContent += `<h3 style="margin: 0 0 8px 0;">${properties.name}</h3>`;
+              }
+              
+              if (properties.highway) {
+                popupContent += `<p style="margin: 4px 0;"><strong>Type:</strong> ${properties.highway}</p>`;
+              }
+              
+              if (properties.osm_id) {
+                popupContent += `<p style="margin: 4px 0;"><strong>OSM ID:</strong> ${properties.osm_id}</p>`;
+              }
+              
+              // Parse other_tags if available
+              if (properties.other_tags) {
+                const tags = properties.other_tags.match(/"([^"]+)"=>"([^"]+)"/g);
+                if (tags && tags.length > 0) {
+                  popupContent += '<p style="margin: 8px 0 4px 0;"><strong>Additional info:</strong></p>';
+                  popupContent += '<ul style="margin: 4px 0; padding-left: 20px;">';
+                  tags.forEach(tag => {
+                    const match = tag.match(/"([^"]+)"=>"([^"]+)"/);
+                    if (match) {
+                      popupContent += `<li>${match[1]}: ${match[2]}</li>`;
+                    }
+                  });
+                  popupContent += '</ul>';
+                }
+              }
+              
+              popupContent += '</div>';
+
+              // Ensure that if the map is zoomed out such that multiple
+              // copies of the feature are visible, the popup appears
+              // over the copy being pointed to.
+              while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+              }
+
+              new maplibregl.Popup()
+                .setLngLat(coordinates)
+                .setHTML(popupContent)
+                .addTo(map);
+            });
+          });
         });
     </script>
   </body>
