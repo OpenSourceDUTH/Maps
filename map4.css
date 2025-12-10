@@ -1,0 +1,160 @@
+
+      :root {
+        --outer-radius: 0.8em;
+        --padding: 0.7em;
+        --inner-radius: calc(var(--outer-radius) - var(--padding));
+      }
+
+      html {
+        font-size: 130.25%;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      #map {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+        z-index: 1;
+      }
+
+      /* Style the main attribution container */
+      .maplibregl-ctrl-attrib.maplibregl-ctrl {
+        color: #ffffffad;
+        font-weight: 600;
+        opacity: 1;
+        background-color: var(--system-black-a40);
+        backdrop-filter: blur(50px);
+        -webkit-backdrop-filter: blur(50px);
+        background-clip: padding-box;
+        border-radius: 3px;
+        margin: 8px 8px;
+        font-family: Georgia, "Times New Roman", Times, serif;
+      }
+
+      .maplibregl-ctrl-attrib a {
+        color: #ffffffad;
+        font-weight: 600;
+        font-family: Georgia, "Times New Roman", Times, serif;
+        text-decoration: none;
+      }
+
+      /* target geolocate control and its inner button/icon */
+      .maplibregl-ctrl-group {
+        color: #fff;
+        border-radius: var(--outer-radius);
+        border-bottom: none;
+        background-color: rgba(0, 0, 0, 0.6);
+        opacity: 0.7;
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        box-shadow: 0 -2px 20px #0000001a, 0 0 12px #0000001a;
+      }
+      .maplibregl-ctrl-group button {
+        border: none;
+      }
+      .maplibregl-ctrl-geolocate {
+        border-radius: var(--outer-radius);
+        box-shadow: 0 -2px 20px #0000001a, 0 0 12px #0000001a;
+      }
+
+      /* Force the icon to be visible against dark background if it's an SVG mask */
+      .maplibregl-ctrl-geolocate .maplibregl-ctrl-icon {
+        filter: invert(1) brightness(2);
+      }
+
+      #map {
+        background: rgba(22, 38, 57, 1);
+      }
+
+      #sidebar{
+        position: absolute;
+        top: 0;
+        left: 0;
+        margin: 0.6em;
+        padding: 0.6em;
+        width: 30vw;
+        min-width: 280px;
+        max-width: 400px;
+        background-color: #00000061;
+        font-family: Georgia, "Times New Roman", Times, serif;
+        font-weight: bold;
+        color: white;
+        border-radius: 0.5em;
+        backdrop-filter: blur(67px);
+        -webkit-backdrop-filter: blur(67px);
+        font-size: clamp(14px, 1.4vw, 18px);
+        z-index: 9999;
+      }
+      
+      #sidebar h1 {
+        font-size: 1em;
+        margin-bottom: 0px;
+        text-align: left;
+      }
+
+      .sidebar-header {
+        display: flex;
+        align-items: center;
+        gap: 0px;
+        margin-bottom: 0px;
+      }
+
+      .sidebar-logo {
+        width: 3em;
+        height: 3em;
+        padding-bottom: 0px;
+      }
+
+      .sidebar-header h1 {
+        margin: 0;
+        margin-right: 0.5em;
+        font-size: clamp(14px, 1.4vw, 20px);
+      }
+
+
+      #search::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+      }
+
+      #search:focus {
+        background-color: rgba(255, 255, 255, 0.15);
+      }
+
+      .sidebar-header {
+        display: flex;
+        align-items: center;
+        gap: 0px;
+        margin-bottom: 0px;
+      }
+
+      .sidebar-logo {
+        width: clamp(24px, 2.5vw, 40px);
+        height: clamp(24px, 2.5vw, 40px);
+      }
+
+
+      #search {
+        font-family: Georgia, "Times New Roman", Times, serif;
+        width: 100%;
+        padding: 0.5em;
+        border: none;
+        border-radius: 6px;
+        background-color: rgba(255, 255, 255, 0.1);
+        color: white;
+        font-size: clamp(10px, 1vw, 14px);
+        outline: none;
+        box-sizing: border-box;
+      }
+
+      #search::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+      }
+
+      #search:focus {
+        background-color: rgba(255, 255, 255, 0.15);
+      }
