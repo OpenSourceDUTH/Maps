@@ -1,160 +1,160 @@
+/* Map CSS */
+.source-serif-4-variable {
+  font-family: "Source Serif 4", serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
 
-      :root {
-        --outer-radius: 0.8em;
-        --padding: 0.7em;
-        --inner-radius: calc(var(--outer-radius) - var(--padding));
-      }
+html {
+  font-size: 62.5%;
+}
 
-      html {
-        font-size: 130.25%;
-      }
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #000000;
+}
 
-      body {
-        margin: 0;
-        padding: 0;
-      }
+/* Maps */
+#map {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  z-index: 1;
+}
 
-      #map {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        width: 100%;
-        z-index: 1;
-      }
+/* Sidebar */
 
-      /* Style the main attribution container */
-      .maplibregl-ctrl-attrib.maplibregl-ctrl {
-        color: #ffffffad;
-        font-weight: 600;
-        opacity: 1;
-        background-color: var(--system-black-a40);
-        backdrop-filter: blur(50px);
-        -webkit-backdrop-filter: blur(50px);
-        background-clip: padding-box;
-        border-radius: 3px;
-        margin: 8px 8px;
-        font-family: Georgia, "Times New Roman", Times, serif;
-      }
+#sidebar {
+  /* Position */
+  top: 1.25em;
+  left: 1.25em;
+  width: min(500px, 90dvw);
+  position: absolute;
+  z-index: 2;
+  color: #ffffff;
+  /* Blur */
+  background-color: #00000080;
+  /* opacity: 0.5; */
+  border-radius: 1.5em;
+  backdrop-filter: blur(50px);
+  -webkit-backdrop-filter: blur(50px);
+  justify-content: space-between;
+  /* Padding */
+}
 
-      .maplibregl-ctrl-attrib a {
-        color: #ffffffad;
-        font-weight: 600;
-        font-family: Georgia, "Times New Roman", Times, serif;
-        text-decoration: none;
-      }
+#sidebar h1 {
+  font-size: 2em;
+  font-weight: 900;
+  font-style: italic;
+  /* margin-bottom: 0px; */
+  text-align: left;
+}
 
-      /* target geolocate control and its inner button/icon */
-      .maplibregl-ctrl-group {
-        color: #fff;
-        border-radius: var(--outer-radius);
-        border-bottom: none;
-        background-color: rgba(0, 0, 0, 0.6);
-        opacity: 0.7;
-        backdrop-filter: blur(15px);
-        -webkit-backdrop-filter: blur(15px);
-        box-shadow: 0 -2px 20px #0000001a, 0 0 12px #0000001a;
-      }
-      .maplibregl-ctrl-group button {
-        border: none;
-      }
-      .maplibregl-ctrl-geolocate {
-        border-radius: var(--outer-radius);
-        box-shadow: 0 -2px 20px #0000001a, 0 0 12px #0000001a;
-      }
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  margin-bottom: 0px;
+  margin-left: 2em;
+  margin-right: 0em;
+  padding-right: 0em;
+}
 
-      /* Force the icon to be visible against dark background if it's an SVG mask */
-      .maplibregl-ctrl-geolocate .maplibregl-ctrl-icon {
-        filter: invert(1) brightness(2);
-      }
+.sidebar-logo {
+  width: 3em;
+  height: 3em;
+  padding-bottom: 0px;
+}
 
-      #map {
-        background: rgba(22, 38, 57, 1);
-      }
+#search {
+  --outer-radius: 1.5em;
+  width: 100%;
+  height: 100%;
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+  padding: 0.5em 1em; /* top/bottom, left/right */
+  border: none;
+  border-radius: calc(var(--outer-radius) - 0.75em);
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 1.7em;
+  outline: none;
+  box-sizing: border-box;
+}
 
-      #sidebar{
-        position: absolute;
-        top: 0;
-        left: 0;
-        margin: 0.6em;
-        padding: 0.6em;
-        width: 30vw;
-        min-width: 280px;
-        max-width: 400px;
-        background-color: #00000061;
-        font-family: Georgia, "Times New Roman", Times, serif;
-        font-weight: bold;
-        color: white;
-        border-radius: 0.5em;
-        backdrop-filter: blur(67px);
-        -webkit-backdrop-filter: blur(67px);
-        font-size: clamp(14px, 1.4vw, 18px);
-        z-index: 9999;
-      }
-      
-      #sidebar h1 {
-        font-size: 1em;
-        margin-bottom: 0px;
-        text-align: left;
-      }
+#search::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
 
-      .sidebar-header {
-        display: flex;
-        align-items: center;
-        gap: 0px;
-        margin-bottom: 0px;
-      }
+#search:focus {
+  background-color: rgba(255, 255, 255, 0.15);
+}
 
-      .sidebar-logo {
-        width: 3em;
-        height: 3em;
-        padding-bottom: 0px;
-      }
+/* Search Mobile */
+@media (max-width: 800px) {
+  #sidebar {
+    position: fixed;
+    top: auto;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    width: auto;
+    max-width: none;
+    min-height: 20em;
+  }
+  
+  
 
-      .sidebar-header h1 {
-        margin: 0;
-        margin-right: 0.5em;
-        font-size: clamp(14px, 1.4vw, 20px);
-      }
+}
 
+/* Attribution */
+.maplibregl-ctrl-attrib.maplibregl-ctrl {
+  color: #ffffffbd;
+  font-weight: 600;
+  background-color: #fff;
+  background-clip: padding-box;
+  border-radius: 3px;
+  margin: 8px 8px;
+  background-color: var(--system-black-a40);
+  backdrop-filter: blur(50px);
+  -webkit-backdrop-filter: blur(50px);
+}
 
-      #search::placeholder {
-        color: rgba(255, 255, 255, 0.5);
-      }
+.maplibregl-ctrl-attrib.maplibregl-ctrl a {
+  color: #ffffffad;
+}
 
-      #search:focus {
-        background-color: rgba(255, 255, 255, 0.15);
-      }
+/* Underline animation */
+a:link,
+a:before,
+a:hover {
+  text-decoration: none;
+  color: #e7e7e7;
+}
 
-      .sidebar-header {
-        display: flex;
-        align-items: center;
-        gap: 0px;
-        margin-bottom: 0px;
-      }
+.hover-underline-animation {
+  display: inline-block;
+  position: relative;
+}
 
-      .sidebar-logo {
-        width: clamp(24px, 2.5vw, 40px);
-        height: clamp(24px, 2.5vw, 40px);
-      }
+.hover-underline-animation::after {
+  text-decoration: none;
+  content: "";
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 2px;
+  bottom: 10px;
+  left: 0;
+  background-color: #e7e7e7;
+  transform-origin: bottom right;
+  transition: transform 0.25s ease-out;
+}
 
-
-      #search {
-        font-family: Georgia, "Times New Roman", Times, serif;
-        width: 100%;
-        padding: 0.5em;
-        border: none;
-        border-radius: 6px;
-        background-color: rgba(255, 255, 255, 0.1);
-        color: white;
-        font-size: clamp(10px, 1vw, 14px);
-        outline: none;
-        box-sizing: border-box;
-      }
-
-      #search::placeholder {
-        color: rgba(255, 255, 255, 0.5);
-      }
-
-      #search:focus {
-        background-color: rgba(255, 255, 255, 0.15);
-      }
+.hover-underline-animation:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}

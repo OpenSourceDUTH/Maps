@@ -2,13 +2,16 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&display=swap"
+      rel="stylesheet"
+    />
     <title>OpenSourceDUTH | Maps</title>
     <link rel="icon" href="favicon.svg" type="image/x-icon" />
-    <meta name="theme-color" content="#ffffff" />
-    <meta
-      name="viewport"
-      content="initial-scale=1,maximum-scale=1,user-scalable=no"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <script src="https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.js"></script>
     <link
       href="https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.css"
@@ -22,7 +25,7 @@
       <div class="sidebar-header">
         <img src="map4.svg" alt="OpenSourceDUTH" class="sidebar-logo" />
         <h1>Maps</h1>
-        <input type="text" id="search" placeholder="Search locations..." />
+        <input type="text" id="search" placeholder="Search the campus..." />
       </div>
     </div>
     <div id="map"></div>
@@ -58,72 +61,75 @@
           );
 
           // Load points after map is loaded
-          map.on('load', () => {
+          map.on("load", () => {
             // Add the points source
-            map.addSource('points', {
-              type: 'geojson',
-              data: 'points.geojson'
+            map.addSource("points", {
+              type: "geojson",
+              data: "points.geojson",
             });
 
             // Add a circle layer for the points
             map.addLayer({
-              id: 'points-layer',
-              type: 'circle',
-              source: 'points',
+              id: "points-layer",
+              type: "circle",
+              source: "points",
               paint: {
-                'circle-radius': 8,
-                'circle-color': '#007cbf',
-                'circle-stroke-width': 2,
-                'circle-stroke-color': '#ffffff'
-              }
+                "circle-radius": 8,
+                "circle-color": "#007cbf",
+                "circle-stroke-width": 2,
+                "circle-stroke-color": "#ffffff",
+              },
             });
 
             // Change cursor on hover
-            map.on('mouseenter', 'points-layer', () => {
-              map.getCanvas().style.cursor = 'pointer';
+            map.on("mouseenter", "points-layer", () => {
+              map.getCanvas().style.cursor = "pointer";
             });
 
-            map.on('mouseleave', 'points-layer', () => {
-              map.getCanvas().style.cursor = '';
+            map.on("mouseleave", "points-layer", () => {
+              map.getCanvas().style.cursor = "";
             });
 
             // Add click event for popups
-            map.on('click', 'points-layer', (e) => {
+            map.on("click", "points-layer", (e) => {
               const coordinates = e.features[0].geometry.coordinates.slice();
               const properties = e.features[0].properties;
-              
+
               // Build popup content
               let popupContent = '<div style="font-family: sans-serif;">';
-              
+
               if (properties.name) {
                 popupContent += `<h3 style="margin: 0 0 8px 0;">${properties.name}</h3>`;
               }
-              
+
               if (properties.highway) {
                 popupContent += `<p style="margin: 4px 0;"><strong>Type:</strong> ${properties.highway}</p>`;
               }
-              
+
               if (properties.osm_id) {
                 popupContent += `<p style="margin: 4px 0;"><strong>OSM ID:</strong> ${properties.osm_id}</p>`;
               }
-              
+
               // Parse other_tags if available
               if (properties.other_tags) {
-                const tags = properties.other_tags.match(/"([^"]+)"=>"([^"]+)"/g);
+                const tags =
+                  properties.other_tags.match(/"([^"]+)"=>"([^"]+)"/g);
                 if (tags && tags.length > 0) {
-                  popupContent += '<p style="margin: 8px 0 4px 0;"><strong>Additional info:</strong></p>';
-                  popupContent += '<ul style="margin: 4px 0; padding-left: 20px;">';
-                  tags.forEach(tag => {
+                  popupContent +=
+                    '<p style="margin: 8px 0 4px 0;"><strong>Additional info:</strong></p>';
+                  popupContent +=
+                    '<ul style="margin: 4px 0; padding-left: 20px;">';
+                  tags.forEach((tag) => {
                     const match = tag.match(/"([^"]+)"=>"([^"]+)"/);
                     if (match) {
                       popupContent += `<li>${match[1]}: ${match[2]}</li>`;
                     }
                   });
-                  popupContent += '</ul>';
+                  popupContent += "</ul>";
                 }
               }
-              
-              popupContent += '</div>';
+
+              popupContent += "</div>";
 
               // Ensure that if the map is zoomed out such that multiple
               // copies of the feature are visible, the popup appears
