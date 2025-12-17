@@ -8,8 +8,8 @@
       href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&display=swap"
       rel="stylesheet"
     />
-    <title>OpenSourceDUTH | Maps</title>
-    <link rel="icon" href="favicon.svg" type="image/x-icon" />
+    <title>Maps | OpenSourceDUTH</title>
+    <link rel="icon" href="map4.svg" type="image/x-icon" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <script src="https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.js"></script>
@@ -20,131 +20,22 @@
     <link rel="stylesheet" href="map4.css" />
   </head>
 
-  <body>
-    <div id="sidebar">
-      <div class="sidebar-header">
-        <img src="map4.svg" alt="OpenSourceDUTH" class="sidebar-logo" />
-        <h1>Maps</h1>
-        <input type="text" id="search" placeholder="Search the campus..." />
+  <body class="source-serif-4-variable">
+    <div id="map">
+      <div id="sidebar">
+        <div class="sheet-handle" aria-hidden="true"></div>
+        <div class="sidebar-header">
+          <img src="map4.svg" alt="OpenSourceDUTH" class="sidebar-logo" />
+          <h1>Maps</h1>
+          <input type="text" id="search" placeholder="Search the campus..." />
+          <button id="sidebar-close-btn" class="close-btn" aria-label="Close">&times;</button>
+        </div>
+        <div id="sidebar-content"></div>
       </div>
     </div>
-    <div id="map"></div>
-    <script>
-      fetch("map4.json")
-        .then((response) => response.json())
-        .then((styleJSON) => {
-          var map = new maplibregl.Map({
-            container: "map",
-            style: styleJSON,
-            // attributionControl: false,
-            attributionControl: {
-              compact: false,
-              customAttribution:
-                '<a href="https://opensource.cs.duth.gr" target="_blank" rel="noopener noreferrer">OpenSourceDUTH</a> | Attributions  |  Privacy',
-            },
-            center: [24.3457, 40.9799], // Centered near Kavala/DUTH area (adjust as needed)
-            zoom: 13,
-            maxBounds: [24.374317, 40.927197, 24.383887, 40.931469],
-          });
-          map.addControl(
-            new maplibregl.NavigationControl({
-              showCompass: false,
-            })
-          );
-          map.addControl(
-            new maplibregl.GeolocateControl({
-              positionOptions: {
-                enableHighAccuracy: true,
-              },
-              trackUserLocation: true,
-            })
-          );
-
-          // Load points after map is loaded
-          map.on("load", () => {
-            // Add the points source
-            map.addSource("points", {
-              type: "geojson",
-              data: "points.geojson",
-            });
-
-            // Add a circle layer for the points
-            map.addLayer({
-              id: "points-layer",
-              type: "circle",
-              source: "points",
-              paint: {
-                "circle-radius": 8,
-                "circle-color": "#007cbf",
-                "circle-stroke-width": 2,
-                "circle-stroke-color": "#ffffff",
-              },
-            });
-
-            // Change cursor on hover
-            map.on("mouseenter", "points-layer", () => {
-              map.getCanvas().style.cursor = "pointer";
-            });
-
-            map.on("mouseleave", "points-layer", () => {
-              map.getCanvas().style.cursor = "";
-            });
-
-            // Add click event for popups
-            map.on("click", "points-layer", (e) => {
-              const coordinates = e.features[0].geometry.coordinates.slice();
-              const properties = e.features[0].properties;
-
-              // Build popup content
-              let popupContent = '<div style="font-family: sans-serif;">';
-
-              if (properties.name) {
-                popupContent += `<h3 style="margin: 0 0 8px 0;">${properties.name}</h3>`;
-              }
-
-              if (properties.highway) {
-                popupContent += `<p style="margin: 4px 0;"><strong>Type:</strong> ${properties.highway}</p>`;
-              }
-
-              if (properties.osm_id) {
-                popupContent += `<p style="margin: 4px 0;"><strong>OSM ID:</strong> ${properties.osm_id}</p>`;
-              }
-
-              // Parse other_tags if available
-              if (properties.other_tags) {
-                const tags =
-                  properties.other_tags.match(/"([^"]+)"=>"([^"]+)"/g);
-                if (tags && tags.length > 0) {
-                  popupContent +=
-                    '<p style="margin: 8px 0 4px 0;"><strong>Additional info:</strong></p>';
-                  popupContent +=
-                    '<ul style="margin: 4px 0; padding-left: 20px;">';
-                  tags.forEach((tag) => {
-                    const match = tag.match(/"([^"]+)"=>"([^"]+)"/);
-                    if (match) {
-                      popupContent += `<li>${match[1]}: ${match[2]}</li>`;
-                    }
-                  });
-                  popupContent += "</ul>";
-                }
-              }
-
-              popupContent += "</div>";
-
-              // Ensure that if the map is zoomed out such that multiple
-              // copies of the feature are visible, the popup appears
-              // over the copy being pointed to.
-              while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-                coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-              }
-
-              new maplibregl.Popup()
-                .setLngLat(coordinates)
-                .setHTML(popupContent)
-                .addTo(map);
-            });
-          });
-        });
-    </script>
+    <script src="scripts/viewport.js" defer></script>
+    <script src="scripts/sidebarHeight.js" defer></script>
+    <script src="scripts/bottomSheetResize.js" defer></script>
+    <script src="scripts/mapInit.js" defer></script>
   </body>
 </html>

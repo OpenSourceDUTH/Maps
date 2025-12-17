@@ -317,7 +317,7 @@
     }
   },
   "sprite": "https://api.maptiler.com/maps/openstreetmap/sprite",
-  "glyphs": "https://api.maptiler.com/fonts/{fontstack}/{range}.pbf?key=get_your_own_OpIi9ZULNHzrESv6T2vL",
+  "glyphs": "https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf",
   "layers": [
     {
       "id": "Background",
@@ -336,10 +336,9 @@
     "source": "openmaptiles", 
     "source-layer": "building",      
     "minzoom": 6,
-    "maxzoom": 14,
+    "maxzoom": 22,
     "filter": [
         "all",
-        ["==", "$type", "Point"],
         ["has", "name"]
     ],
     "layout": {
