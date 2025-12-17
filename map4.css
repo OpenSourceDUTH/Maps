@@ -47,6 +47,7 @@ body {
   top: 1.25em;
   left: 1.25em;
   width: min(500px, 90dvw);
+  height: 4.5em;
   position: absolute;
   z-index: 2;
   color: #ffffff;
@@ -54,6 +55,10 @@ body {
   border-radius: 1.5em;
   backdrop-filter: blur(50px);
   -webkit-backdrop-filter: blur(50px);
+
+  /* Add transition for sidebar-expanded */
+  transition: all 0.25s ease-in-out;
+  will-change: top, left, height, border-radius, width;
 }
 
 /* Hide bottom sheet drag handle on pc */
@@ -100,7 +105,7 @@ body {
   outline: none;
   box-sizing: border-box;
 }
-#close-btn{
+#sidebar-close-btn {
   display: none;
 }
 #search::placeholder {
@@ -109,6 +114,62 @@ body {
 
 #search:focus {
   background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Sidebar PC */
+#sidebar.sidebar-expanded {
+  font-size: 1rem;
+  top: 0px;
+  left: 0px;
+  padding: 1em 0 0 3em;
+  width: min(500px, 90dvw);
+  height: 100dvh;
+  position: absolute;
+  z-index: 2;
+  color: #ffffff;
+  background-color: #00000080;
+  border-radius: 0px;
+  backdrop-filter: blur(50px);
+  -webkit-backdrop-filter: blur(50px);
+}
+
+#sidebar.sidebar-expanded #sidebar-close-btn {
+  display: block;
+}
+#sidebar.sidebar-expanded #search {
+  display: none;
+}
+#sidebar.sidebar-expanded .sidebar-logo {
+  display: none;
+}
+#sidebar.sidebar-expanded .sidebar-header {
+  display: none;
+}
+
+#sidebar.sidebar-expanded h1 {
+  font-size: 3em;
+  font-weight: 900;
+  text-align: left;
+}
+
+/* Sidebar Mobile */
+@media (max-width: 800px) {
+  #sidebar.sidebar-expanded-mobile {
+    font-size: 1em;
+    padding: 1em 0 0 3em;
+  }
+  #sidebar.sidebar-expanded-mobile #sidebar-close-btn {
+    display: block;
+  }
+  #sidebar.sidebar-expanded-mobile #search {
+    display: none;
+  }
+  #sidebar.sidebar-expanded-mobile .sidebar-logo {
+    display: none;
+  }
+  #sidebar.sidebar-expanded-mobile .sidebar-header {
+    display: none;
+  }
 }
 
 /* Bottom Sheet */
@@ -173,7 +234,6 @@ body {
     margin-left: 0;
     margin-right: 0;
   }
-
 }
 
 /* Attribution */
@@ -202,7 +262,7 @@ body {
   color: #ffffffad;
 }
 
-@media(max-width: 800px) {
+@media (max-width: 800px) {
   .maplibregl-ctrl-bottom-left,
   .maplibregl-ctrl-bottom-right {
     /* Push attribution above the bottom sheet */

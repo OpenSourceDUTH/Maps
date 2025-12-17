@@ -3,32 +3,40 @@
   function resetSidebar() {
     const sidebar = document.getElementById("sidebar");
     const sidebarContent = document.getElementById("sidebar-content");
-    
+
     sidebar.classList.remove("sidebar-expanded");
+    sidebar.classList.remove("sidebar-expanded-mobile");
     sidebarContent.innerHTML = "";
-    
+
     // Reset mobile height to default (revert to CSS)
     document.documentElement.style.removeProperty("--mobile-sidebar-height");
   }
 
   // Helper to expand sidebar
   function expandSidebar() {
-    const sidebar = document.getElementById("sidebar");
-    sidebar.classList.add("sidebar-expanded");
-    
     if (window.matchMedia("(max-width: 800px)").matches) {
-      const getVVHeight = () => (window.visualViewport ? window.visualViewport.height : window.innerHeight);
+      const sidebar = document.getElementById("sidebar");
+      sidebar.classList.add("sidebar-expanded-mobile");
+      const getVVHeight = () =>
+        window.visualViewport
+          ? window.visualViewport.height
+          : window.innerHeight;
       const vvHeight = getVVHeight();
-      // Second snap point logic: Math.round(vvHeight * 0.45)
-      // This matches the logic in bottomSheetResize.js
+      // Second snap point logic
       const targetHeight = Math.round(vvHeight * 0.45);
-      
+
       sidebar.style.transition = "height 250ms ease";
-      document.documentElement.style.setProperty("--mobile-sidebar-height", `${targetHeight}px`);
-      
+      document.documentElement.style.setProperty(
+        "--mobile-sidebar-height",
+        `${targetHeight}px`
+      );
+
       setTimeout(() => {
         sidebar.style.transition = "";
       }, 280);
+    } else {
+      const sidebar = document.getElementById("sidebar");
+      sidebar.classList.add("sidebar-expanded");
     }
   }
 
@@ -100,12 +108,16 @@
 
         // Handle clicks on the map
         map.on("click", (e) => {
-          const features = map.queryRenderedFeatures(e.point, { layers: ["points-layer"] });
-          
+          const features = map.queryRenderedFeatures(e.point, {
+            layers: ["points-layer"],
+          });
+
           if (features.length > 0) {
             // Clicked on a point
             const feature = features[0];
+            // Keeping this here so we can possibly add a share function without sharing the URL (To keep the URL clean)
             const coordinates = feature.geometry.coordinates.slice();
+            console.log(coordinates);
             const properties = feature.properties || {};
 
             // Build content for sidebar
@@ -121,7 +133,6 @@
             if (sidebarContent) {
               sidebarContent.innerHTML = content;
               expandSidebar();
-              
               // Scroll to top of sidebar content
               sidebarContent.scrollTop = 0;
             }
