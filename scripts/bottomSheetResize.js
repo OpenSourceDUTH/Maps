@@ -11,11 +11,11 @@
 
   // Snap points (edit these to taste)
   const SNAP_POINTS = (vvHeight) => {
-    const min = 160;
+    const min = 120; // Match CSS min-height
     const points = [
       min,
-      Math.round(vvHeight * 0.45),
-      Math.round(vvHeight * 0.8),
+      Math.round(vvHeight * 0.4),
+      Math.round(vvHeight * 0.7),
       Math.round(vvHeight - 16)
     ];
     // remove duplicates and sort
@@ -49,6 +49,7 @@
 
   let startY = 0;
   let startHeight = 0;
+  let currentHeight = 0;
   let dragging = false;
   let moved = false;
 
@@ -57,13 +58,12 @@
 
     const dy = startY - e.clientY; // drag up => positive
     const vvHeight = getVVHeight();
-    console.log('SNAP_POINTS', vvHeight, SNAP_POINTS(vvHeight));
     const minHeight = 120;
     const maxHeight = Math.max(minHeight, vvHeight - 16);
-    const nextHeight = clamp(startHeight + dy, minHeight, maxHeight);
+    currentHeight = clamp(startHeight + dy, minHeight, maxHeight);
 
-    moved = true;
-    document.documentElement.style.setProperty("--mobile-sidebar-height", `${Math.round(nextHeight)}px`);
+    if (Math.abs(dy) > 5) moved = true;
+    document.documentElement.style.setProperty("--mobile-sidebar-height", `${Math.round(currentHeight)}px`);
     e.preventDefault();
   };
 
@@ -81,15 +81,16 @@
     window.removeEventListener("pointercancel", endDrag);
 
     if (isBottomSheetMode() && moved) {
-      const current = sidebar.getBoundingClientRect().height;
-      const snapped = snapToNearest(current);
+      const snapped = snapToNearest(currentHeight);
 
       // Small snap animation
-      sidebar.style.transition = "height 160ms ease";
+      sidebar.style.transition = "height 200ms cubic-bezier(0.2, 0.8, 0.2, 1)";
       document.documentElement.style.setProperty("--mobile-sidebar-height", `${Math.round(snapped)}px`);
       window.setTimeout(() => {
         sidebar.style.transition = "";
-      }, 180);
+      }, 250);
+    } else {
+      sidebar.style.transition = "";
     }
   };
 
@@ -100,6 +101,10 @@
     moved = false;
     startY = e.clientY;
     startHeight = sidebar.getBoundingClientRect().height;
+    currentHeight = startHeight;
+
+    // Disable transitions while dragging so it follows the finger instantly
+    sidebar.style.transition = "none";
 
     handle.setPointerCapture(e.pointerId);
 

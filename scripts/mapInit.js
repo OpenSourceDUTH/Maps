@@ -65,11 +65,11 @@
         maxBounds: [24.374317, 40.927197, 24.383887, 40.931469],
       });
 
-      map.addControl(
-        new maplibregl.NavigationControl({
-          showCompass: false,
-        })
-      );
+      // map.addControl(
+      //   new maplibregl.NavigationControl({
+      //     showCompass: false,
+      //   })
+      // );
 
       map.addControl(
         new maplibregl.GeolocateControl({

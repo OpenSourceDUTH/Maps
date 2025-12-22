@@ -1,4 +1,8 @@
 /* Map CSS */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 .source-serif-4-variable {
   font-family: "Source Serif 4", serif;
   font-optical-sizing: auto;
