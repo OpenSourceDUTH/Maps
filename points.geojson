@@ -132,7 +132,7 @@
       "type": "Feature",
       "properties": {
         "osm_id": "12737448533",
-        "name": "Φοιτιτικό Εστιατόριο",
+        "name": "Φοιτητικό Εστιατόριο",
         "other_tags": "\"addr:city\"=>\"Καβάλα\",\"addr:postcode\"=>\"65404\",\"air_conditioning\"=>\"yes\",\"amenity\"=>\"restaurant\",\"opening_hours\"=>\"Mo-Su 08:00-09:30,12:30-16:00,18:00-21:00\",\"smoking\"=>\"no\",\"toilets\"=>\"yes\",\"website\"=>\"https://opensource.cs.duth.gr/food\",\"wheelchair\"=>\"limited\""
       },
       "geometry": { "type": "Point", "coordinates": [24.3799647, 40.9293483] }
