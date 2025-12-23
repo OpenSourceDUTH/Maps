@@ -1919,26 +1919,6 @@
       }
     },
     {
-      "id": "building-labels",
-      "type": "symbol",
-      "source": "openmaptiles",
-      "source-layer": "building",
-      "minzoom": 15,
-      "layout": {
-        "text-field": ["get", "name"],
-        "text-size": 13,
-        "text-font": ["Open Sans Regular"],
-        "text-anchor": "center",
-        "text-justify": "center",
-        "visibility": "visible"
-      },
-      "paint": {
-        "text-color": "#222",
-        "text-halo-color": "#fff",
-        "text-halo-width": 1.2
-      }
-    },
-    {
       "id": "Highway link tunnel outline",
       "type": "line",
       "metadata": {},
