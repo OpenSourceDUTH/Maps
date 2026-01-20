@@ -73,11 +73,13 @@ echo_padded "${BOLD}${YELLOW}Press any key to get started or Ctrl+C to exit...${
 # Get terminal height
 rows=$(tput lines)
 
-# Move cursor to the last row, first column
+# Move cursor to the last row, first column. This is only for the first page. Idk I just like it more this way.
 tput cup $rows 0
 read -n 1 -s
 clear
+
 # --- Check OS ---
+# If someone wants to port this to Mac/Windows, be my guest.
 if [[ "$OSTYPE" != "linux-gnu"* ]]; then
     echo_error "This script requires Linux."
     exit 1
@@ -101,11 +103,18 @@ done
 
 clear
 
+
+# --- Basic preparation ---
+
 echo_step "1: Installing Dependencies"
 
 echo "Will implement this later. IDFC." # LEAVE ME ALONE!!!!!
 
 clear
+
+
+# --- This is to handle different OSes and package managers. Fall back to compile from source ---
+# CHORE: This is a good first issue. You may use LLMs here, but be careful and test the code yourself.
 
 # if [ "$pkg_mgr" == "apt" ]; then
 #     sudo add-apt-repository -y ppa:m-bartlett/tilemaker
@@ -150,19 +159,19 @@ clear
 #     # fi
 # fi
 
-# Send a message to signal that everything is installed successfully.
-
+# echo_success sends a message to signal that everything is installed successfully.
 echo_success "All dependencies installed successfully."
 sleep 1 
 clear
 
-# We need to find a way to make this script manage multiple areas for multiple universities.
-# We could have some default ones for places we support and maintain but allow users to add their own areas.
-# For now, I will simply make it so that the default behavior is to download the area for DUTH from /scripts/campuses.
+
+# --- Download Map Data For a specific campus ---
+# The list is being generated from the files in the campuses/ directory.
 
 echo_step "2. Downloading Map Data"
 
-# --- Dependency Check ---
+# --- Sanity check for dependencies ---
+# Should already be installed from previous step, but just in case...
 if ! command -v python3 &> /dev/null || ! command -v osmtogeojson &> /dev/null || ! command -v tippecanoe &> /dev/null || ! command -v curl &> /dev/null; then
     echo_error "Missing required tools: python3, osmtogeojson, tippecanoe, or curl."
     echo "Please ensure they are installed and in your PATH."
@@ -192,7 +201,9 @@ process_campus() {
     local input_path="$1"
     local filename=$(basename -- "$input_path")
     local name="${filename%.*}"
+    echo name: $name
     
+    exit 0
     echo_padded "Processing: ${BOLD}$name${NORMAL}"
 
     COORDS=$(python3 extract_poly.py "$input_path")
@@ -203,21 +214,21 @@ process_campus() {
 
     echo_padded "   Fetching raw OSM data (full metadata)..."
     # Query: nwr(poly:"LAT LON...") -> get Nodes, Ways, Relations in polygon
-    curl -g -X POST --data-urlencode "data=[out:json][timeout:90];nwr(poly:\"$COORDS\");out meta geom;" "https://overpass-api.de/api/interpreter" -o "temp_raw.json" --silent
+    curl -g -X POST --data-urlencode "data=[out:json][timeout:90];nwr(poly:\"$COORDS\");out meta geom;" "https://overpass-api.de/api/interpreter" -o "${name}_raw.json" --silent
     
-    if [ ! -s "temp_raw.json" ]; then
+    if [ ! -s "${name}_raw.json" ]; then
         echo_error "Download failed or returned empty response."
         return
     fi
 
     echo_padded "   Converting to GeoJSON..."
-    osmtogeojson --meta "temp_raw.json" > "temp_geo.json"
+    osmtogeojson --meta "${name}_raw.json" > "${name}_geo.json"
 
     echo_padded "   Generating MBTiles..."
     tippecanoe -o "$TILES_DIR/$name.mbtiles" \
         -zg --drop-densest-as-needed --extend-zooms-if-still-dropping --force \
         --preserve-id \
-        "temp_geo.json" "$input_path" &> /dev/null
+        "${name}_geo.json" "$input_path" &> /dev/null
     
     # Translate (MBTiles -> PMTiles)
     if command -v pmtiles &> /dev/null; then
@@ -229,7 +240,7 @@ process_campus() {
         echo_padded "   ${YELLOW}Note:${NORMAL} 'pmtiles' CLI not found. Skipping translation to .pmtiles"
     fi
 
-    rm -f "temp_raw.json" "temp_geo.json"
+    rm -f "${name}_raw.json" "${name}_geo.json"
 }
 
 # --- Selection Menu ---
@@ -250,7 +261,7 @@ select choice in "${options[@]}"; do
     case "$choice" in
         "Custom Path")
             echo ""
-            echo_info "Enter the full path to your boundary file:"
+            echo_info "Enter the full path (from /) to your boundary file:"
             read -e -p "Path: " custom_path
             
             custom_path="${custom_path%\"}"

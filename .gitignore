@@ -1,3 +1,5 @@
 .env
 scripts/campuses/*
 scripts/tiles/*
+*.mbtiles
+*.pmtiles
